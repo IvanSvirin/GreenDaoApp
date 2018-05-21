@@ -7,6 +7,9 @@ public class User2 extends RealmObject {
     private String firstName;
     private String lastName;
 
+    public User2() {
+    }
+
     public Long getId() {
         return id;
     }

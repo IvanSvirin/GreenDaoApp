@@ -2,32 +2,34 @@ package com.example.isvirin.greendaoapp.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.test.mock.MockApplication;
 
 import com.example.isvirin.greendaoapp.DaoApp;
 import com.example.isvirin.greendaoapp.R;
-import com.example.isvirin.greendaoapp.model.DaoSession;
-import com.example.isvirin.greendaoapp.model.User;
 import com.example.isvirin.greendaoapp.model.User2;
 import com.example.isvirin.greendaoapp.model.UserDao;
 
-import org.greenrobot.greendao.query.Query;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<User> users = new ArrayList<>();
+//    private ArrayList<User> users = new ArrayList<>();
     public static ArrayList<User2> usersForList = new ArrayList<>();
+    Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this).build();
+//        realm = Realm.getInstance(new RealmConfiguration.Builder(this).build());
+//        realm = Realm.getInstance(((DaoApp) getApplication()).getRealmConfiguration());
+        Realm.deleteRealm(Realm.getDefaultConfiguration());
+        realm = Realm.getDefaultInstance();
 
         generateUsers();
         writeUsers();
@@ -42,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showUsersList() {
-        Realm realm = Realm.getInstance(this);
         realm.beginTransaction();
         RealmQuery<User2> query = realm.where(User2.class);
         RealmResults<User2> result1 = query.findAll();
@@ -69,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void generateUsers() {
-        Realm realm = Realm.getInstance(this);
         realm.beginTransaction();
         for (int i = 0; i < 100; i++) {
             User2 user = realm.createObject(User2.class); // Create a new object
@@ -77,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
             user.setLastName("last_name_" + i);
 //            users.add(new User("first_name_" + i, "last_name_" + i));
         }
+//        User2 user = realm.createObject(User2.class); // Create a new object
+//        user.setFirstName("first_name_");
+//        user.setLastName("last_name_");
+
         realm.commitTransaction();
     }
 }
